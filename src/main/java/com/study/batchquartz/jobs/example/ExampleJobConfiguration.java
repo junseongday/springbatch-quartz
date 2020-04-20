@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -37,17 +38,19 @@ public class ExampleJobConfiguration {
 
     private JobBuilderFactory jobBuilderFactory;
     private StepBuilderFactory stepBuilderFactory;
+    private EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    public ExampleJobConfiguration(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory) {
+    public ExampleJobConfiguration(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, EntityManagerFactory entityManagerFactory) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     @Bean
     public CronTriggerFactoryBean exampleJob1Trigger() {
         return BatchHelper.cronTriggerFactoryBeanBuilder()
-                .cronExpression("1/1 * * 1/1 * ? *")
+                .cronExpression("0 0 1 1/1 * ? *")
                 .jobDetailFactoryBean(exampleJob1Schedule())
                 .build();
     }
